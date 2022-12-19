@@ -3,7 +3,7 @@ import * as os from 'os';
 import { dirname } from 'path';
 import { Observable } from 'rxjs';
 import { Worker } from 'worker_threads';
-import { Files } from './models';
+import { File } from './models';
 
 function sliceIntoChunks(arr: any[], chunkSize: number): any[][] {
   const res = [];
@@ -14,7 +14,7 @@ function sliceIntoChunks(arr: any[], chunkSize: number): any[][] {
   return res;
 }
 
-export function findStringInFolder(str: string, include: string, exclude: string, folder: string): Observable<Files> {
+export function findStringInFolder(str: string, include: string, exclude: string, folder: string): Observable<File[]> {
   return new Observable((subscriber) => {
     console.log({ str, include, exclude });
     if (!str.trim()) {
@@ -31,7 +31,7 @@ export function findStringInFolder(str: string, include: string, exclude: string
 
     const files = globbySync(patterns, { cwd: folder, onlyFiles: true, gitignore: true });
 
-    let matched: Files = [];
+    let matched: File[] = [];
 
     const filesChunks: string[][] = sliceIntoChunks(files, Math.floor(files.length / (os.cpus().length - 1)));
 

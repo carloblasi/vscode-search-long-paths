@@ -3,30 +3,26 @@ import { Subject } from 'rxjs';
 import * as vscode from 'vscode';
 import { CONFIG_FOLDER } from '../constants/config';
 import { findStringInFolder } from './findStringInFolder';
-import { Files, WorkspaceState } from './models';
+import { File, WorkspaceState } from './models';
 
 const onUpdate = new Subject<void>();
 
 export const store = {
-  convertedFiles: [],
+  state: 'list',
+  visibleFiles: [],
   error: '',
-  files: [],
-  isFolderInvalid: false,
   search: '',
   include: '',
   exclude: '',
   selected: !!vscode.workspace.workspaceFile ? vscode.workspace.workspaceFile.fsPath : '',
-  sort: 'ascending',
-  state: 'list',
-  visibleFiles: [],
   dispatch(fn: any) {
     onUpdate.next();
   },
   onUpdate,
 } as WorkspaceState;
 
-export const setSearchTerm = (value: string, include: string, exclude: string): Promise<Files> => {
-  return new Promise<Files>((resolve) => {
+export const setSearchTerm = (value: string, include: string, exclude: string): Promise<File[]> => {
+  return new Promise<File[]>((resolve) => {
     store.search = value;
     store.include = include;
     store.exclude = exclude;
@@ -41,18 +37,16 @@ export const setSearchTerm = (value: string, include: string, exclude: string): 
       resolve([]);
     }
 
-    findStringInFolder(value, include, exclude, baseFolder).subscribe(
-      (matched) => {
+    findStringInFolder(value, include, exclude, baseFolder).subscribe({
+      next: (matched) => {
         store.visibleFiles = matched.map((_) => ({ ..._ }));
-        store.convertedFiles = matched.map((_) => ({ ..._ }));
-        store.files = matched.map((_) => ({ ..._ }));
         store.state = 'list';
         resolve(matched);
       },
-      (error) => {
+      error: (error) => {
         console.error(error);
         resolve([]);
-      }
-    );
+      },
+    });
   });
 };

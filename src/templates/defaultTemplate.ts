@@ -1,7 +1,7 @@
 import { t } from 'vscode-ext-localisation';
 import { FS_WEBVIEW_WORKSPACE_CSS, FS_WEBVIEW_WORKSPACE_JS } from '../constants';
 import { RenderVars, TemplateVars, WorkspaceState } from '../webviews/models';
-import { listView } from './views/listView';
+import { listView } from './listView';
 
 export const defaultTemplate = (options: TemplateVars, state: WorkspaceState): string => {
   const {

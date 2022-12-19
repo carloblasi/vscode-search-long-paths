@@ -6,13 +6,7 @@ import { CMD_OPEN_CUR_WIN } from '../constants';
 import { getHtml } from '../templates';
 import { defaultTemplate } from '../templates/defaultTemplate';
 import { setSearchTerm, store } from './store';
-import {
-  HtmlData,
-  PostMessage,
-  WorkspacePmActions as Actions,
-  WorkspacePmPayload as Payload,
-  WorkspaceState,
-} from './models';
+import { Actions } from './models';
 
 const { executeCommand } = vscode.commands;
 
@@ -59,21 +53,19 @@ export class WebViewProvider implements vscode.WebviewViewProvider, vscode.TextD
 
   private render() {
     if (this._view) {
-      const state = store;
+      const nonce = crypto.randomBytes(16).toString('hex');
 
-      const htmlData: HtmlData<WorkspaceState> = {
-        data: { ...state },
-        title: t('views.title'),
-        webview: this._view.webview,
-      };
-
-      this._view.webview.html = getHtml<WorkspaceState>(
+      this._view.webview.html = getHtml(
         {
           extensionPath: this._extensionUri,
           template: defaultTemplate,
-          htmlData,
+          htmlData: {
+            data: { ...store },
+            title: t('views.title'),
+            webview: this._view.webview,
+          },
         },
-        crypto.randomBytes(16).toString('hex')
+        nonce
       );
     } else {
       vscode.window.showErrorMessage(t('errors.viewNotFound'));
@@ -92,7 +84,7 @@ export class WebViewProvider implements vscode.WebviewViewProvider, vscode.TextD
       }
     });
 
-    webviewView.webview.onDidReceiveMessage((message: PostMessage<Payload, Actions>) => {
+    webviewView.webview.onDidReceiveMessage((message: { action: Actions; payload: string }) => {
       const { action, payload } = message;
 
       console.log('### message', action, payload);
