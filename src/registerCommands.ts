@@ -7,7 +7,7 @@ export const registerCommands = (context: vscode.ExtensionContext, workspaceView
 
   context.subscriptions.push(
     registerCommand(CMD_OPEN_CUR_WIN, (file: string): void => {
-      vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(file), false);
+      vscode.commands.executeCommand('vscode.open', vscode.Uri.file(file));
     })
   );
 };
