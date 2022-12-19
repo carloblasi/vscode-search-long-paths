@@ -43,6 +43,7 @@ export const listView = (state: WorkspaceState, renderVars: RenderVars): string 
         >
         <div class="results">
           <span id="resultsText">0 results</span>
+          <div id="open-in-editor-wrapper">&nbsp;-&nbsp;<button id="open-in-editor" type="button">Open in editor</button></div>
         </div>
       </form>
       <div id="list" class="list__list"></div>

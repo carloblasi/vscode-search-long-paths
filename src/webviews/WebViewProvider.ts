@@ -16,7 +16,7 @@ import {
 
 const { executeCommand } = vscode.commands;
 
-export class WebViewProvider implements vscode.WebviewViewProvider {
+export class WebViewProvider implements vscode.WebviewViewProvider, vscode.TextDocumentContentProvider {
   public static readonly viewType = 'search-long-paths-webview-workspace';
   private _view?: vscode.WebviewView;
   searchBoxKeyUp$ = new Subject<{ value: string; include: string; exclude: string }>();
@@ -114,10 +114,23 @@ export class WebViewProvider implements vscode.WebviewViewProvider {
           executeCommand('workbench.action.openSettings', 'searchLongPaths');
           break;
 
+        case Actions.OPEN_IN_EDITOR:
+          const uri = vscode.Uri.parse(
+            WebViewProvider.viewType + ':' + store.visibleFiles.map((_) => _.file).join('\n')
+          );
+          vscode.workspace.openTextDocument(uri).then((doc) => {
+            vscode.window.showTextDocument(doc, { preview: false });
+          });
+          break;
+
         default:
           break;
       }
     });
+  }
+
+  provideTextDocumentContent(uri: vscode.Uri): string {
+    return uri.path;
   }
 
   public focusInput() {

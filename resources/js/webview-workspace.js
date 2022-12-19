@@ -6,6 +6,8 @@
   const searchInput = document.getElementById('searchWorkspaces');
   const includeInput = document.getElementById('includeSettings');
   const excludeInput = document.getElementById('excludeSettings');
+  const openInEditorButton = document.getElementById('open-in-editor');
+  const openInEditorWrapper = document.getElementById('open-in-editor-wrapper');
 
   const wsElements = Array.from(document.getElementsByClassName('list__element--unselected'));
 
@@ -75,6 +77,12 @@
       if (resultsSpan) {
         resultsSpan.textContent = list.length + ' results';
       }
+
+      if (list.length > 0) {
+        openInEditorWrapper?.removeAttribute('hidden');
+      } else {
+        openInEditorWrapper?.setAttribute('hidden', 'true');
+      }
     }
   };
   window['updateList'] = updateList;
@@ -82,11 +90,6 @@
   const handleElementClick = (event) => {
     event.stopPropagation();
     sendMessage('OPEN_CUR_WINDOW', event.currentTarget.dataset.file);
-  };
-
-  const handleViewLInkClick = (event) => {
-    event.stopPropagation();
-    sendMessage('SHOW_SETTINGS');
   };
 
   const handleRightClick = (event) => {
@@ -124,6 +127,8 @@
   };
 
   function onLoad() {
+    openInEditorWrapper?.setAttribute('hidden', 'true');
+
     if (searchInput) {
       searchInput.addEventListener('change', onInputChange);
       searchInput.addEventListener('keyup', onInputChange);
@@ -148,6 +153,13 @@
       // @ts-ignore
       searchInput.setSelectionRange(100, 100);
     }
+
+    if (openInEditorButton) {
+      openInEditorButton.onclick = (event) => {
+        event.preventDefault();
+        sendMessage('OPEN_IN_EDITOR');
+      };
+    }
   }
 
   function onMessageReceived(event) {
@@ -163,7 +175,7 @@
         break;
 
       case 'UPDATE_LIST':
-        const {list, search, include, exclude} = JSON.parse(message.message);
+        const { list, search, include, exclude } = JSON.parse(message.message);
         // @ts-ignore
         searchInput.value = search;
         // @ts-ignore

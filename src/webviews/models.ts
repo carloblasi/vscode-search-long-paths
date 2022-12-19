@@ -21,6 +21,7 @@ export enum WorkspacePmActions {
   OPEN_NEW_WINDOW = 'OPEN_NEW_WINDOW',
   SEARCH = 'SEARCH',
   SHOW_SETTINGS = 'SHOW_SETTINGS',
+  OPEN_IN_EDITOR = 'OPEN_IN_EDITOR',
 }
 
 export type WorkspacePmPayload = string;
