@@ -4,7 +4,7 @@
   "displayName": "Search long paths",
   "version": "0.0.1",
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
   "bugs": {
     "url": "https://github.com/carloblasi/vscode-search-long-paths/issues"
