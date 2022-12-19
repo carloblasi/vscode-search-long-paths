@@ -1,0 +1,17 @@
+.cache
+.gitignore
+.prettierrc.js
+.stylelintignore
+.stylelintrc
+.vscode-test/**
+.vscode/**
+*.code-workspace
+**/.eslintrc.json
+**/.vsix
+**/*.map
+**/*.ts
+**/tsconfig.json
+commitlint.config.js
+out/test/**
+src/**
+test/**
