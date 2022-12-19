@@ -11,6 +11,7 @@
 **/*.map
 **/*.ts
 **/tsconfig.json
+node_modules/**
 commitlint.config.js
 out/test/**
 src/**
