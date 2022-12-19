@@ -1,0 +1,110 @@
+{
+  "name": "vscode-search-long-paths",
+  "description": "Search replacement that can search in paths longer than 260 characters in your workspace and lets you open them in the current window.",
+  "displayName": "Search long paths",
+  "version": "0.0.1",
+  "activationEvents": [
+    "*"
+  ],
+  "bugs": {
+    "url": "https://github.com/carloblasi/vscode-search-long-paths/issues"
+  },
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "commands": [],
+    "configuration": {
+      "title": "Search long paths",
+      "properties": {}
+    },
+    "keybindings": [],
+    "menus": {
+      "view/item/context": []
+    },
+    "views": {
+      "search-long-paths": [
+        {
+          "type": "webview",
+          "id": "search-long-paths-webview-workspace",
+          "name": ""
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "icon": "./resources/images/activitybar.svg",
+          "id": "search-long-paths",
+          "title": "Search (long paths)"
+        }
+      ]
+    }
+  },
+  "engines": {
+    "vscode": "^1.57.1"
+  },
+  "icon": "logo.png",
+  "keywords": [
+    "workspaces"
+  ],
+  "license": "MIT",
+  "main": "./dist/extension.js",
+  "publisher": "carloblasi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carloblasi/vscode-search-long-paths"
+  },
+  "scripts": {
+    "vscode:prepublish": "webpack --mode production",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "test-compile": "tsc -p ./",
+    "test-watch": "tsc -watch -p ./",
+    "pretest": "yarn run test-compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
+    "crypto": "^1.0.1",
+    "vscode-codicons": "0.0.17",
+    "vscode-ext-localisation": "^1.0.1",
+    "rxjs": "7.6.0",
+    "virtualized-list": "2.2.0"
+  },
+  "devDependencies": {
+    "@types/sinon": "^10.0.2",
+    "@types/chai": "^4.2.19",
+    "chai": "^4.3.4",
+    "@commitlint/config-conventional": "^13.0.0",
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.2.2",
+    "@types/mock-fs": "^4.13.0",
+    "@types/node": "16.x",
+    "@types/stylelint": "^13.13.1",
+    "@types/vscode": "^1.57.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
+    "babel": "^6.23.0",
+    "commitlint": "^13.0.0",
+    "eslint": "^7.30.0",
+    "glob": "^7.1.7",
+    "husky": "^7.0.0",
+    "lint-staged": "^11.0.0",
+    "mocha": "^9.0.2",
+    "mock-fs": "^5.0.0",
+    "parcel": "^2.0.0-nightly.752",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-recommended": "^5.0.0",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.5",
+    "vscode-test": "^1.5.2",
+    "webpack": "^5.42.1",
+    "webpack-cli": "^4.7.2"
+  }
+}

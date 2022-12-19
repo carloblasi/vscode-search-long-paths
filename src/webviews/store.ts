@@ -1,0 +1,58 @@
+import * as os from 'os';
+import { Subject } from 'rxjs';
+import * as vscode from 'vscode';
+import { CONFIG_FOLDER } from '../constants/config';
+import { findStringInFolder } from './findStringInFolder';
+import { Files, WorkspaceState } from './models';
+
+const onUpdate = new Subject<void>();
+
+export const store = {
+  convertedFiles: [],
+  error: '',
+  files: [],
+  isFolderInvalid: false,
+  search: '',
+  include: '',
+  exclude: '',
+  selected: !!vscode.workspace.workspaceFile ? vscode.workspace.workspaceFile.fsPath : '',
+  sort: 'ascending',
+  state: 'list',
+  visibleFiles: [],
+  dispatch(fn: any) {
+    onUpdate.next();
+  },
+  onUpdate,
+} as WorkspaceState;
+
+export const setSearchTerm = (value: string, include: string, exclude: string): Promise<Files> => {
+  return new Promise<Files>((resolve) => {
+    store.search = value;
+    store.include = include;
+    store.exclude = exclude;
+
+    const conf = vscode.workspace.getConfiguration();
+    const folder: string = conf.get('searchLongPaths.folder') || CONFIG_FOLDER;
+    const homeDir = os.homedir();
+    const baseFolder = folder ? folder.replace(`~`, homeDir) : homeDir;
+
+    if (baseFolder === undefined) {
+      console.log('Open a folder first');
+      resolve([]);
+    }
+
+    findStringInFolder(value, include, exclude, baseFolder).subscribe(
+      (matched) => {
+        store.visibleFiles = matched.map((_) => ({ ..._ }));
+        store.convertedFiles = matched.map((_) => ({ ..._ }));
+        store.files = matched.map((_) => ({ ..._ }));
+        store.state = 'list';
+        resolve(matched);
+      },
+      (error) => {
+        console.error(error);
+        resolve([]);
+      }
+    );
+  });
+};
