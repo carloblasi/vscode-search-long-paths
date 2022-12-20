@@ -18,7 +18,7 @@ export class WebViewProvider implements vscode.WebviewViewProvider, vscode.TextD
   constructor(private readonly _extensionUri: vscode.Uri) {
     this.searchBoxKeyUp$
       .pipe(
-        debounceTime(1000),
+        debounceTime(400),
         switchMap((options) => {
           return from(
             vscode.window.withProgress({ location: { viewId: WebViewProvider.viewType }, cancellable: false }, () => {
