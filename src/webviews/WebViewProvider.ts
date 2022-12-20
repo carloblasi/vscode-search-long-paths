@@ -130,4 +130,17 @@ export class WebViewProvider implements vscode.WebviewViewProvider, vscode.TextD
       this._view.webview.postMessage({ action: Actions.FOCUS_SEARCH });
     }
   }
+
+  onActivate() {
+    this.focusInput();
+
+    const activeEditor = vscode.window.activeTextEditor;
+    const selectedText = activeEditor?.document.getText(activeEditor?.selection);
+    if (selectedText) {
+      this._view!.webview.postMessage({
+        action: 'SET_SEARCH_INPUT',
+        message: selectedText,
+      });
+    }
+  }
 }

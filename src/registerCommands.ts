@@ -8,6 +8,12 @@ export const registerCommands = (context: vscode.ExtensionContext, workspaceView
   context.subscriptions.push(
     registerCommand(CMD_OPEN_CUR_WIN, (file: string): void => {
       vscode.commands.executeCommand('vscode.open', vscode.Uri.file(file));
+    }),
+    registerCommand('workbench.view.extension.search-long-paths', (): void => {
+      workspaceViewProvider.onActivate();
+    }),
+    registerCommand('workbench.view.extension.search-long-paths.focus', (): void => {
+      workspaceViewProvider.onActivate();
     })
   );
 };

@@ -176,17 +176,16 @@
 
       case 'UPDATE_LIST':
         const { list, search, include, exclude } = JSON.parse(message.message);
-        // @ts-ignore
-        searchInput.value = search;
-        // @ts-ignore
-        includeInput.value = include;
-        // @ts-ignore
-        excludeInput.value = exclude;
         // console.log(list);
         updateList(list);
 
         break;
 
+      case 'SET_SEARCH_INPUT':
+        if (searchInput) {
+          // @ts-ignore
+          searchInput.value = message.message;
+        }
       default:
         break;
     }
