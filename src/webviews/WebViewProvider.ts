@@ -79,8 +79,14 @@ export class WebViewProvider implements vscode.WebviewViewProvider, vscode.TextD
     };
 
     webviewView.onDidChangeVisibility(() => {
-      if (this._view?.visible && store.visibleFiles.length > 0) {
-        this.askViewToUpdateList();
+      if (this._view?.visible) {
+        if (store.visibleFiles.length > 0) {
+          this.askViewToUpdateList();
+        }
+        this._view.webview.postMessage({
+          action: 'SET_SEARCH_INPUT',
+          message: store.search,
+        });
       }
     });
 
