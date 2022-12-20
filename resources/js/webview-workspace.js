@@ -123,6 +123,15 @@
 
     if (changes) {
       sendMessage('SEARCH', JSON.stringify({ value: searchTerm, include: includeTerm, exclude: excludeTerm }));
+      const container = document.getElementById('list');
+      if (container) {
+        container.innerHTML = '';
+      }
+      const resultsSpan = document.getElementById('resultsText');
+      if (resultsSpan) {
+        resultsSpan.textContent = '0 results';
+      }
+      openInEditorWrapper?.setAttribute('hidden', 'true');
     }
   };
 
