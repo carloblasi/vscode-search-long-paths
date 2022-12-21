@@ -39,8 +39,6 @@ export const setSearchTerm = (value: string, include: string, exclude: string): 
 
     findStringInFolder(value, include, exclude, baseFolder).subscribe({
       next: (matched) => {
-        store.visibleFiles = matched.map((_) => ({ ..._ }));
-        store.state = 'list';
         resolve(matched);
       },
       error: (error) => {

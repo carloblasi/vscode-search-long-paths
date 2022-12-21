@@ -7,6 +7,7 @@ import { getHtml } from '../templates';
 import { defaultTemplate } from '../templates/defaultTemplate';
 import { setSearchTerm, store } from './store';
 import { Actions } from './models';
+import { invalidateCachedFiles } from './findStringInFolder';
 
 const { executeCommand } = vscode.commands;
 
@@ -14,21 +15,35 @@ export class WebViewProvider implements vscode.WebviewViewProvider, vscode.TextD
   public static readonly viewType = 'search-long-paths-webview-workspace';
   private _view?: vscode.WebviewView;
   searchBoxKeyUp$ = new Subject<{ value: string; include: string; exclude: string }>();
+  include: string = '';
+  exclude: string = '';
 
   constructor(private readonly _extensionUri: vscode.Uri) {
     this.searchBoxKeyUp$
       .pipe(
         debounceTime(400),
         switchMap((options) => {
+          if (options.include !== this.include || options.exclude !== this.exclude) {
+            invalidateCachedFiles();
+          }
+
           return from(
-            vscode.window.withProgress({ location: { viewId: WebViewProvider.viewType }, cancellable: false }, () => {
-              return setSearchTerm(options.value, options.include, options.exclude);
-            })
+            vscode.window.withProgress(
+              { location: { viewId: WebViewProvider.viewType }, cancellable: false, title: '' },
+              () => {
+                return setSearchTerm(options.value, options.include, options.exclude);
+              }
+            )
           );
         })
       )
       .subscribe({
-        next: () => this.askViewToUpdateList(),
+        next: (matched) => {
+          store.visibleFiles = matched;
+          store.state = 'list';
+
+          this.askViewToUpdateList();
+        },
         error: () => store.dispatch((store.state = 'invalid')),
       });
   }
