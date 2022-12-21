@@ -1,8 +1,8 @@
 {
   "name": "vscode-search-long-paths",
   "description": "Search replacement that can search in paths longer than 260 characters in your workspace and lets you open them in the current window.",
-  "displayName": "Search long paths",
-  "version": "0.0.2",
+  "displayName": "Search Long Paths",
+  "version": "0.0.3",
   "activationEvents": [
     "onStartupFinished"
   ],
