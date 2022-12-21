@@ -194,6 +194,7 @@
         if (searchInput) {
           // @ts-ignore
           searchInput.value = message.message;
+          searchTerm = message.message;
         }
       default:
         break;
